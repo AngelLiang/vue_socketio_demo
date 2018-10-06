@@ -9,13 +9,13 @@
 <script>
 export default {
   name: 'ScoketioTest',
-  data() {
+  data () {
     return {
     }
   }, // data
   created () {
   },
-  destroyed() {
+  destroyed () {
   },
 
   sockets: {

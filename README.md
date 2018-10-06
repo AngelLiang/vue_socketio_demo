@@ -132,3 +132,86 @@ pipenv install
 pipenv shell
 python flask_app.py
 ```
+
+### 进阶：使用Store处理
+
+
+我们可以使用`Vuex`的`Store`对接收到的数据进行处理。首先要安装`vuex`
+
+```
+npm install --save vuex
+```
+
+然后新建`src/store/index.js`，拷贝下面的代码。
+
+```js
+/*
+ * Socket mutations always have SOCKET_ prefix.
+ * Socket actions always have socket_ prefix and the socket event name is
+ *  camelCased (ex. SOCKET_USER_MESSAGE => socket_userMessage)
+ * You can use either one or another or both in your store.
+ * Namespaced modules are supported.
+ */
+import Vue from 'vue'
+import Vuex from 'vuex'
+
+Vue.use(Vuex)
+
+export default new Vuex.Store({
+  state: {
+    connect: false,
+    message: null
+  },
+  mutations: {
+    SOCKET_CONNECTING: (state, status) => {
+      console.log('socket connecting')
+    },
+    SOCKET_CONNECT: (state, status) => {
+      state.connect = true
+      console.log('socket connected')
+    },
+    SOCKET_DISCONNECT: (state, status) => {
+      state.connect = false
+      console.log('socket close')
+    },
+    SOCKET_DATA: (state, message) => {
+      state.message = message
+      console.log('SOCKET_DATA Received:')
+      console.log(message)
+    }
+  },
+  actions: {
+  }
+})
+
+```
+
+有关Vuex的`state`、`mutations`和`actions`请参见[官网教程](https://vuex.vuejs.org/zh/)。
+
+然后修改`src/main.js`，添加相关代码（有`add store`注释的地方）。
+
+```js
+import Vue from 'vue'
+import App from './App'
+import router from './router'
+// add store
+import store from './store'
+// 引入vue-socket.io
+import VueSocketio from 'vue-socket.io'
+const namespace = '/task'
+Vue.use(VueSocketio, 'http://127.0.0.1:5000' + namespace, store) // add store
+
+Vue.config.productionTip = false
+
+/* eslint-disable no-new */
+new Vue({
+  el: '#app',
+  store, // add store
+  router,
+  components: { App },
+  template: '<App/>'
+})
+
+```
+
+最后进入测试页面，点击相关按钮即可看到效果。
