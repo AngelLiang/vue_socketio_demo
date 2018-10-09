@@ -13,20 +13,21 @@ export default {
     return {
     }
   }, // data
+
   created () {
   },
   destroyed () {
   },
 
-  sockets: {
-    connect () {
-      console.log('socket connected')
-    },
-    data (val) {
-      console.log('This method was fired by the socket server. eg: io.emit("data", data)')
-      console.log(val)
-    }
-  }, // sockets
+  // sockets: {
+  //   connect () {
+  //     console.log('socket connected')
+  //   },
+  //   data (val) {
+  //     console.log('This method was fired by the socket server. eg: io.emit("data", data)')
+  //     console.log(val)
+  //   }
+  // }, // sockets
 
   methods: {
     onSocketEmitTestBtn () {
